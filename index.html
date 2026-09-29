@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaruPlayer 2000</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Varela+Round&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e2d1f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        .player-container {
+            width: 360px;
+            background-color: #f7efff;
+            border: 3px solid #b392d6;
+            border-radius: 12px;
+            box-shadow: 5px 5px 0px #b392d6;
+            overflow: hidden;
+            color: #4a3e65;
+        }
+
+        /* Title Bar */
+        .title-bar {
+            background-color: #d8b4e2;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #b392d6;
+            font-size: 10px;
+        }
+
+        .title-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .title-bar-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .win-btn {
+            width: 14px;
+            height: 14px;
+            background-color: #f7efff;
+            border: 1px solid #4a3e65;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8px;
+            cursor: pointer;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 16px;
+        }
+
+        /* Top Section: CD & Info */
+        .top-section {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .cd-case {
+            width: 110px;
+            height: 110px;
+            background-color: #dfceef;
+            border: 2px solid #9c7bbd;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 2px 2px 0px rgba(255,255,255,0.6);
+        }
+
+        .cd-disc {
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle, #fff 15%, #ffc8dd 30%, #bde0fe 60%, #ffafcc 90%);
+            border-radius: 50%;
+            border: 1px solid #9c7bbd;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cd-center {
+            width: 20px;
+            height: 20px;
+            background-color: #f7efff;
+            border: 1px solid #9c7bbd;
+            border-radius: 50%;
+        }
+
+        .cd-label {
+            position: absolute;
+            bottom: 4px;
+            background: #fff;
+            font-size: 6px;
+            padding: 2px 4px;
+            border: 1px solid #9c7bbd;
+            transform: rotate(-5deg);
+            text-align: center;
+        }
+
+        .track-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .now-playing {
+            font-size: 8px;
+            color: #7d6b9e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .track-title {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #2b213a;
+            margin-bottom: 4px;
+        }
+
+        .track-mix {
+            font-size: 13px;
+            color: #2b213a;
+            margin-bottom: 8px;
+        }
+
+        .sparkles {
+            font-size: 10px;
+            color: #b392d6;
+        }
+
+        /* Habits / Progress Box */
+        .habits-box {
+            background-color: #fff;
+            border: 2px solid #b392d6;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 16px;
+        }
+
+        .habits-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 8px;
+            margin-bottom: 8px;
+        }
+
+        .play-icon {
+            width: 14px;
+            height: 14px;
+            background-color: #8265b2;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8px;
+            border-radius: 2px;
+        }
+
+        .habits-bars {
+            display: flex;
+            gap: 3px;
+        }
+
+        .habit-segment {
+            flex: 1;
+            height: 10px;
+            background-color: #ffc2d1;
+            border: 1px solid #b392d6;
+        }
+
+        .habit-segment.empty {
+            background-color: #f7efff;
+        }
+
+        /* Equalizer Waveform */
+        .waveform {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 35px;
+            padding: 0 4px;
+            margin-bottom: 16px;
+            border-bottom: 1px dashed #b392d6;
+            padding-bottom: 4px;
+        }
+
+        .bar {
+            width: 4px;
+            background-color: #b392d6;
+        }
+
+        /* Bottom Control Panel */
+        .control-panel {
+            background-color: #fff;
+            border: 2px solid #b392d6;
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #7d6b9e;
+        }
+
+        .main-play-btn {
+            width: 36px;
+            height: 36px;
+            background-color: #f7efff;
+            border: 2px solid #b392d6;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ff6b8b;
+            font-size: 12px;
+            box-shadow: 2px 2px 0px #b392d6;
+        }
+
+        /* Time Slider */
+        .time-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 7px;
+            color: #7d6b9e;
+        }
+
+        .slider-track {
+            flex: 1;
+            height: 6px;
+            background-color: #f7efff;
+            border: 1px solid #b392d6;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .slider-fill {
+            width: 40%;
+            height: 100%;
+            background-color: #ffafcc;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .slider-thumb {
+            width: 10px;
+            height: 10px;
+            background-color: #ffafcc;
+            border: 1px solid #8265b2;
+            border-radius: 50%;
+            position: absolute;
+            top: -3px;
+            left: 40%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="player-container">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="title-bar-left">
+                <span>❤️</span>
+                <span>HaruPlayer 2000</span>
+            </div>
+            <div class="title-bar-buttons">
+                <div class="win-btn">-</div>
+                <div class="win-btn">◻</div>
+                <div class="win-btn">✕</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Top Section -->
+            <div class="top-section">
+                <div class="cd-case">
+                    <div class="cd-disc">
+                        <div class="cd-center"></div>
+                    </div>
+                    <div class="cd-label">DISCIPLINE<br>♥♥♥♥</div>
+                </div>
+                <div class="track-info">
+                    <div class="now-playing">🎧 NOW PLAYING</div>
+                    <div class="track-title">DISCIPLINE</div>
+                    <div class="track-mix">MIX <span class="sparkles">✨ ✧ ✦</span></div>
+                </div>
+            </div>
+
+            <!-- Habits Section -->
+            <div class="habits-box">
+                <div class="habits-header">
+                    <div class="play-icon">▶</div>
+                    <span>07/10 Habits Completed</span>
+                </div>
+                <div class="habits-bars">
+                    <div class="habit-segment"></div>
+                    <div class="habit-segment"></div>
+                    <div class="habit-segment"></div>
+                    <div class="habit-segment"></div>
+                    <div class="habit-segment"></div>
+                    <div class="habit-segment"></div>
+                    <div class="habit-segment"></div>
+                    <div class="habit-segment empty"></div>
+                    <div class="habit-segment empty"></div>
+                    <div class="habit-segment empty"></div>
+                </div>
+            </div>
+
+            <!-- Equalizer Waveform -->
+            <div class="waveform">
+                <div class="bar" style="height: 10px;"></div>
+                <div class="bar" style="height: 15px;"></div>
+                <div class="bar" style="height: 8px;"></div>
+                <div class="bar" style="height: 22px;"></div>
+                <div class="bar" style="height: 14px;"></div>
+                <div class="bar" style="height: 28px;"></div>
+                <div class="bar" style="height: 18px;"></div>
+                <div class="bar" style="height: 12px;">C</div>
+                <div class="bar" style="height: 25px;"></div>
+                <div class="bar" style="height: 19px;"></div>
+                <div class="bar" style="height: 30px;"></div>
+                <div class="bar" style="height: 15px;"></div>
+                <div class="bar" style="height: 20px;"></div>
+                <div class="bar" style="height: 10px;"></div>
+                <div class="bar" style="height: 24px;"></div>
+                <div class="bar" style="height: 16px;"></div>
+                <div class="bar" style="height: 8px;"></div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="control-buttons">
+                    <span>🔀</span>
+                    <span>⏮</span>
+                    <div class="main-play-btn">▶</div>
+                    <span>⏭</span>
+                    <span>🔁</span>
+                </div>
+                <div class="time-slider-container">
+                    <span>01:23</span>
+                    <div class="slider-track">
+                        <div class="slider-fill"></div>
+                        <div class="slider-thumb"></div>
+                    </div>
+                    <span>03:45</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
